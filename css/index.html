@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>일정 관리 웹앱 | Prompt Calendar</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>📅 Prompt Calendar</h1>
+    <p class="subtitle">프롬프트 기반 일정 관리 웹앱 — 예스 이앤씨 인턴십 토이 프로젝트</p>
+  </header>
+
+  <main class="container">
+    <!-- Step 2: 캘린더 컨트롤 바 (FR-VIEW-05, 06) -->
+    <section class="calendar-toolbar">
+      <div class="nav-group">
+        <button id="btn-prev" class="nav-btn" title="이전 달">◀</button>
+        <h2 id="current-month-label">-</h2>
+        <button id="btn-next" class="nav-btn" title="다음 달">▶</button>
+      </div>
+      <button id="btn-today" class="today-btn">오늘</button>
+    </section>
+
+    <!-- Step 2: 월 뷰 격자 (FR-VIEW-01) -->
+    <section class="calendar-wrap">
+      <div class="weekday-row">
+        <div class="weekday sun">일</div><div class="weekday">월</div>
+        <div class="weekday">화</div><div class="weekday">수</div>
+        <div class="weekday">목</div><div class="weekday">금</div>
+        <div class="weekday sat">토</div>
+      </div>
+      <div id="calendar-root" class="month-grid"><!-- calendar.js가 렌더링 --></div>
+    </section>
+
+    <p class="hint">※ Step 3에서 날짜 클릭 시 일정 생성, 일정 클릭 시 상세 보기가 추가됩니다.</p>
+  </main>
+
+  <footer class="app-footer">
+    <p>Step 2 · 월 뷰 캘린더 (FR-VIEW-01, 05, 06) · GitHub Pages 정적 호스팅 · 순수 HTML/CSS/JS</p>
+  </footer>
+
+  <script src="js/calendar.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
