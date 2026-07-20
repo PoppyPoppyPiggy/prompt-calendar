@@ -1,0 +1,6 @@
+{
+  "users": [
+    { "id": "user01", "name": "사용자1", "color": "#4285f4" },
+    { "id": "user02", "name": "사용자2", "color": "#e91e63" }
+  ]
+}

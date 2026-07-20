@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>일정 관리 웹앱 | Prompt Calendar</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>📅 Prompt Calendar</h1>
+    <p class="subtitle">프롬프트 기반 일정 관리 웹앱 — 예스 이앤씨 인턴십 토이 프로젝트</p>
+  </header>
+
+  <main class="container">
+    <section class="deploy-check">
+      <h2>✅ Step 1: GitHub Pages 배포 확인</h2>
+      <p>이 페이지가 보인다면 GitHub Pages 배포에 성공한 것입니다.</p>
+      <ul class="check-list">
+        <li id="check-html">HTML 로드: <strong>성공</strong></li>
+        <li id="check-css">CSS 로드: <strong id="css-status">확인 중...</strong></li>
+        <li id="check-js">JS 로드: <strong id="js-status">확인 중...</strong></li>
+        <li id="check-data">데이터 파일 접근: <strong id="data-status">확인 중...</strong></li>
+      </ul>
+      <p class="today" id="today-display"></p>
+    </section>
+
+    <section class="next-step">
+      <h3>다음 단계</h3>
+      <p>Step 2에서 이 자리에 월(Month) 뷰 캘린더가 렌더링됩니다. (FR-VIEW-01, 05, 06)</p>
+      <div id="calendar-root"><!-- Step 2: 캘린더가 여기에 렌더링됨 --></div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>Step 1 골격 배포 · GitHub Pages 정적 호스팅 · 순수 HTML/CSS/JS</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
