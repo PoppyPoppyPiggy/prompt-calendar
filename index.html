@@ -13,17 +13,20 @@
   </header>
 
   <main class="container">
-    <!-- Step 2: 캘린더 컨트롤 바 (FR-VIEW-05, 06) -->
+    <!-- 캘린더 툴바 (FR-VIEW-05, 06) -->
     <section class="calendar-toolbar">
       <div class="nav-group">
         <button id="btn-prev" class="nav-btn" title="이전 달">◀</button>
         <h2 id="current-month-label">-</h2>
         <button id="btn-next" class="nav-btn" title="다음 달">▶</button>
       </div>
-      <button id="btn-today" class="today-btn">오늘</button>
+      <div class="toolbar-right">
+        <button id="btn-new-event" class="new-btn">+ 새 일정</button>
+        <button id="btn-today" class="today-btn">오늘</button>
+      </div>
     </section>
 
-    <!-- Step 2: 월 뷰 격자 (FR-VIEW-01) -->
+    <!-- 월 뷰 격자 (FR-VIEW-01) -->
     <section class="calendar-wrap">
       <div class="weekday-row">
         <div class="weekday sun">일</div><div class="weekday">월</div>
@@ -31,16 +34,73 @@
         <div class="weekday">목</div><div class="weekday">금</div>
         <div class="weekday sat">토</div>
       </div>
-      <div id="calendar-root" class="month-grid"><!-- calendar.js가 렌더링 --></div>
+      <div id="calendar-root" class="month-grid"></div>
     </section>
 
-    <p class="hint">※ Step 3에서 날짜 클릭 시 일정 생성, 일정 클릭 시 상세 보기가 추가됩니다.</p>
+    <p class="hint">날짜를 클릭하면 일정을 만들 수 있고, 일정을 클릭하면 상세 보기·수정·삭제가 가능합니다. (저장: 브라우저 localStorage — Step 5에서 GitHub 레포 연동으로 전환)</p>
   </main>
 
+  <!-- Step 3: 일정 생성/수정 모달 (FR-EVENT-01, 03, 05) -->
+  <div id="event-modal" class="modal-overlay">
+    <div class="modal">
+      <h3 id="modal-title">일정 만들기</h3>
+      <label class="field">
+        <span>제목 *</span>
+        <input type="text" id="ev-title" placeholder="일정 제목" maxlength="60">
+      </label>
+      <label class="field checkbox-field">
+        <input type="checkbox" id="ev-allday"> <span>종일</span>
+      </label>
+      <div class="field-row">
+        <label class="field">
+          <span>시작</span>
+          <input type="date" id="ev-start-date">
+          <input type="time" id="ev-start-time">
+        </label>
+        <label class="field">
+          <span>종료</span>
+          <input type="date" id="ev-end-date">
+          <input type="time" id="ev-end-time">
+        </label>
+      </div>
+      <label class="field">
+        <span>장소</span>
+        <input type="text" id="ev-location" placeholder="장소 (선택)" maxlength="60">
+      </label>
+      <label class="field">
+        <span>설명</span>
+        <textarea id="ev-desc" rows="3" placeholder="설명 (선택)"></textarea>
+      </label>
+      <div class="modal-actions">
+        <button id="ev-cancel" class="btn-ghost">취소</button>
+        <button id="ev-save" class="btn-primary">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: 일정 상세 모달 (FR-EVENT-02, 04) -->
+  <div id="detail-modal" class="modal-overlay">
+    <div class="modal">
+      <h3 id="dt-title">-</h3>
+      <dl class="detail-list">
+        <dt>일시</dt><dd id="dt-time">-</dd>
+        <dt>장소</dt><dd id="dt-location">-</dd>
+        <dt>설명</dt><dd id="dt-desc">-</dd>
+      </dl>
+      <div class="modal-actions">
+        <button id="dt-delete" class="btn-danger">삭제</button>
+        <span class="spacer"></span>
+        <button id="dt-close" class="btn-ghost">닫기</button>
+        <button id="dt-edit" class="btn-primary">수정</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="app-footer">
-    <p>Step 2 · 월 뷰 캘린더 (FR-VIEW-01, 05, 06) · GitHub Pages 정적 호스팅 · 순수 HTML/CSS/JS</p>
+    <p>Step 3 · 일정 CRUD (FR-EVENT-01~05) · localStorage 저장 · GitHub Pages 정적 호스팅</p>
   </footer>
 
+  <script src="js/storage.js"></script>
   <script src="js/calendar.js"></script>
   <script src="js/app.js"></script>
 </body>
