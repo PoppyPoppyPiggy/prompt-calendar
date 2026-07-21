@@ -10,6 +10,17 @@
       "location": "",
       "description": "",
       "repeat": "weekly"
+    },
+    {
+      "id": "evt-20260721-jhbp",
+      "title": "더위먹은날",
+      "start": "2026-07-14T09:00:00",
+      "end": "2026-07-18T10:00:00",
+      "allDay": false,
+      "calendar": "default",
+      "location": "",
+      "description": "",
+      "repeat": null
     }
   ]
 }
