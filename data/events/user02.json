@@ -1,1 +1,15 @@
-{ "events": [] }
+{
+  "events": [
+    {
+      "id": "evt-20260721-slzw",
+      "title": "인턴십 일정",
+      "start": "2026-07-21T09:00:00",
+      "end": "2026-07-21T10:00:00",
+      "allDay": false,
+      "calendar": "cal-84vtcr",
+      "location": "",
+      "description": "",
+      "repeat": "weekly"
+    }
+  ]
+}
