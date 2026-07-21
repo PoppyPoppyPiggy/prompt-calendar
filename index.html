@@ -19,6 +19,9 @@
         <select id="user-select"></select>
       </label>
       <span id="sync-badge" class="sync-badge saving">불러오는 중...</span>
+      <button id="btn-export" class="nav-btn" title="일정 JSON 내려받기">⬇ 내보내기</button>
+      <button id="btn-import" class="nav-btn" title="일정 JSON 불러오기">⬆ 가져오기</button>
+      <input type="file" id="import-file" accept=".json,application/json" class="hidden">
       <button id="btn-token" class="nav-btn" title="GitHub 토큰 설정">🔑 토큰 설정</button>
     </section>
 
@@ -29,7 +32,17 @@
         <h2 id="current-month-label">-</h2>
         <button id="btn-next" class="nav-btn" title="다음 달">▶</button>
       </div>
+      <div class="view-switch">
+        <button class="view-btn active" data-view="month">월</button>
+        <button class="view-btn" data-view="week">주</button>
+        <button class="view-btn" data-view="day">일</button>
+        <button class="view-btn" data-view="agenda">목록</button>
+      </div>
       <div class="toolbar-right">
+        <div class="search-box">
+          <input type="search" id="search-input" placeholder="🔍 일정 검색" maxlength="40">
+          <div id="search-results" class="search-results hidden"></div>
+        </div>
         <button id="btn-new-event" class="new-btn">+ 새 일정</button>
         <button id="btn-today" class="today-btn">오늘</button>
       </div>
@@ -47,7 +60,7 @@
     </section>
 
     <!-- 월 뷰 격자 (FR-VIEW-01) -->
-    <section class="calendar-wrap">
+    <section id="month-wrap" class="calendar-wrap">
       <div class="weekday-row">
         <div class="weekday sun">일</div><div class="weekday">월</div>
         <div class="weekday">화</div><div class="weekday">수</div>
@@ -55,6 +68,22 @@
         <div class="weekday sat">토</div>
       </div>
       <div id="calendar-root" class="month-grid"></div>
+    </section>
+
+    <!-- Step 6: 주/일 뷰 (FR-VIEW-02, 03) -->
+    <section id="week-wrap" class="calendar-wrap hidden">
+      <div id="tg-head" class="tg-head"></div>
+      <div id="tg-scroll" class="tg-scroll">
+        <div class="tg-body">
+          <div id="tg-gutter" class="tg-gutter"></div>
+          <div id="tg-cols" class="tg-cols"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 6: 목록 뷰 (FR-VIEW-04) -->
+    <section id="agenda-wrap" class="calendar-wrap agenda-wrap hidden">
+      <div id="agenda-root" class="agenda-root"></div>
     </section>
 
     <p class="hint">날짜를 클릭하면 일정을 만들 수 있고, 일정을 클릭하면 상세 보기·수정·삭제가 가능합니다. (저장: 브라우저 localStorage — Step 5에서 GitHub 레포 연동으로 전환)</p>
@@ -88,6 +117,16 @@
         <select id="ev-calendar"></select>
       </label>
       <label class="field">
+        <span>반복</span>
+        <select id="ev-repeat">
+          <option value="">반복 안 함</option>
+          <option value="daily">매일</option>
+          <option value="weekly">매주</option>
+          <option value="monthly">매월</option>
+          <option value="yearly">매년</option>
+        </select>
+      </label>
+      <label class="field">
         <span>장소</span>
         <input type="text" id="ev-location" placeholder="장소 (선택)" maxlength="60">
       </label>
@@ -109,6 +148,7 @@
       <dl class="detail-list">
         <dt>일시</dt><dd id="dt-time">-</dd>
         <dt>캘린더</dt><dd id="dt-calendar">-</dd>
+        <dt>반복</dt><dd id="dt-repeat">-</dd>
         <dt>장소</dt><dd id="dt-location">-</dd>
         <dt>설명</dt><dd id="dt-desc">-</dd>
       </dl>
@@ -146,7 +186,7 @@
   </div>
 
   <footer class="app-footer">
-    <p>Step 5 · GitHub 레포 데이터 연동 (FR-USER-01~04) · 옵션 A: Contents API + 사용자 입력 토큰 · localStorage 저장 · GitHub Pages 정적 호스팅</p>
+    <p>Step 6 · 주/일/목록 뷰·반복·멀티데이·검색·내보내기 (FR-VIEW-02~04, FR-EVENT-06·08, FR-ETC-01·05) · localStorage 저장 · GitHub Pages 정적 호스팅</p>
   </footer>
 
   <script src="js/storage.js"></script>

@@ -15,9 +15,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderCalendarPanel();
 
   // 네비게이션 (Step 2)
-  document.getElementById("btn-prev").addEventListener("click", () => moveMonth(-1));
-  document.getElementById("btn-next").addEventListener("click", () => moveMonth(1));
+  document.getElementById("btn-prev").addEventListener("click", () => moveView(-1));
+  document.getElementById("btn-next").addEventListener("click", () => moveView(1));
   document.getElementById("btn-today").addEventListener("click", goToday);
+
+  // Step 6: 뷰 전환 (FR-VIEW-02~04)
+  document.querySelectorAll(".view-btn").forEach(b =>
+    b.addEventListener("click", () => setViewMode(b.dataset.view)));
+
+  // Step 6: 일정 검색 (FR-ETC-01)
+  document.getElementById("search-input").addEventListener("input", runSearch);
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".search-box")) hideSearchResults();
+  });
+
+  // Step 6: 내보내기/가져오기 (FR-ETC-05)
+  document.getElementById("btn-export").addEventListener("click", exportEvents);
+  document.getElementById("btn-import").addEventListener("click", () => document.getElementById("import-file").click());
+  document.getElementById("import-file").addEventListener("change", importEvents);
 
   // 캘린더 카테고리 (Step 4)
   document.getElementById("cal-add").addEventListener("click", addCalendarFromPanel);
@@ -145,6 +160,7 @@ function openCreateModal(dateKey) {
   document.getElementById("ev-location").value = "";
   document.getElementById("ev-desc").value = "";
   fillCalendarSelect("default");
+  document.getElementById("ev-repeat").value = "";
   toggleTimeInputs();
   openModal("event-modal");
   document.getElementById("ev-title").focus();
@@ -164,6 +180,7 @@ function openEditModal(id) {
   document.getElementById("ev-location").value = ev.location || "";
   document.getElementById("ev-desc").value = ev.description || "";
   fillCalendarSelect(ev.calendar || "default");
+  document.getElementById("ev-repeat").value = ev.repeat || "";
   toggleTimeInputs();
   openModal("event-modal");
 }
@@ -191,7 +208,7 @@ function saveEventFromForm() {
     calendar: document.getElementById("ev-calendar").value || "default",
     location: document.getElementById("ev-location").value.trim(),
     description: document.getElementById("ev-desc").value.trim(),
-    repeat: null
+    repeat: document.getElementById("ev-repeat").value || null
   };
 
   const ok = editingId ? EventStore.update(ev) : EventStore.add(ev);
@@ -214,6 +231,8 @@ function openDetailModal(id) {
   const dtCal = CalendarStoreDB.get(ev.calendar);
   document.getElementById("dt-calendar").innerHTML = dtCal
     ? `<span class="cal-dot" style="background:${dtCal.color}"></span>${dtCal.name}` : "-";
+  const repeatLabels = { daily: "매일", weekly: "매주", monthly: "매월", yearly: "매년" };
+  document.getElementById("dt-repeat").textContent = ev.repeat ? repeatLabels[ev.repeat] : "반복 안 함";
   document.getElementById("dt-location").textContent = ev.location || "-";
   document.getElementById("dt-desc").textContent = ev.description || "-";
   openModal("detail-modal");
@@ -320,4 +339,77 @@ function toggleTimeInputs() {
   const allDay = document.getElementById("ev-allday").checked;
   document.getElementById("ev-start-time").disabled = allDay;
   document.getElementById("ev-end-time").disabled = allDay;
+}
+
+
+/* =====================================================
+   Step 6: 일정 검색 (FR-ETC-01)
+===================================================== */
+function runSearch() {
+  const q = document.getElementById("search-input").value.trim().toLowerCase();
+  const box = document.getElementById("search-results");
+  if (!q) { hideSearchResults(); return; }
+
+  const hits = EventStore.load()
+    .filter(ev =>
+      ev.title.toLowerCase().includes(q) ||
+      (ev.description || "").toLowerCase().includes(q) ||
+      (ev.location || "").toLowerCase().includes(q))
+    .sort((a, b) => a.start.localeCompare(b.start))
+    .slice(0, 10);
+
+  box.innerHTML = "";
+  if (!hits.length) {
+    const r = document.createElement("div");
+    r.className = "search-empty";
+    r.textContent = "검색 결과 없음";
+    box.appendChild(r);
+  } else {
+    hits.forEach(ev => {
+      const r = document.createElement("div");
+      r.className = "search-hit";
+      r.innerHTML = `<span class="hit-date">${ev.start.slice(0, 10)}</span> ${ev.title}`;
+      r.addEventListener("click", () => { hideSearchResults(); openDetailModal(ev.id); });
+      box.appendChild(r);
+    });
+  }
+  box.classList.remove("hidden");
+}
+function hideSearchResults() {
+  document.getElementById("search-results").classList.add("hidden");
+}
+
+/* =====================================================
+   Step 6: 일정 내보내기/가져오기 (FR-ETC-05)
+===================================================== */
+function exportEvents() {
+  const data = JSON.stringify({ events: EventStore.load() }, null, 2);
+  const blob = new Blob([data], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `events_${EventStore.userId}_${toDateKey(new Date())}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function importEvents(e) {
+  const file = e.target.files[0];
+  e.target.value = ""; // 같은 파일 재선택 허용
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const parsed = JSON.parse(reader.result);
+      if (!Array.isArray(parsed.events)) throw new Error("events 배열 없음");
+      if (!confirm(`${parsed.events.length}건의 일정을 가져옵니다.\n현재 사용자의 기존 일정을 대체할까요?`)) return;
+      EventStore.save(parsed.events);
+      reloadEvents();
+      renderView();
+      syncPush();
+    } catch (err) {
+      alert("가져오기 실패: 올바른 일정 JSON 파일이 아닙니다. (NFR-04)");
+      console.error(err);
+    }
+  };
+  reader.readAsText(file, "utf-8");
 }

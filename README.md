@@ -23,5 +23,5 @@ data/events/*.json  # 사용자별 일정 데이터
 - [x] Step 3: 일정 CRUD — localStorage (FR-EVENT-01~05)
 - [x] Step 4: 캘린더 카테고리·색상 (FR-CAL-01~03)
 - [x] Step 5: GitHub 레포 데이터 연동 (FR-USER-01~04)
-- [ ] Step 6: 부가 뷰·기능
+- [x] Step 6: 부가 뷰·기능
 - [ ] Step 7: 마감·문서화
