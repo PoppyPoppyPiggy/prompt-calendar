@@ -169,6 +169,7 @@ function moveEventToDate(id, targetKey) {
   if (EventStore.update(ev)) {
     reloadEvents();
     renderCalendar();
+    if (typeof syncPush === "function") syncPush(); // Step 5: 이동도 레포 반영
   }
 }
 

@@ -273,3 +273,35 @@ body {
   font-family: inherit; font-size: 0.9rem; background: #fff;
 }
 #dt-calendar .cal-dot { margin-right: 5px; }
+
+/* ===== Step 5: 사용자 바·동기화 배지·토큰 모달 (FR-USER-01~04) ===== */
+.user-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid #dfe6e9;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.user-label { font-size: 0.85rem; font-weight: 700; color: #636e72; display: flex; align-items: center; gap: 6px; }
+.user-label select {
+  padding: 6px 8px; border: 1px solid #dfe6e9; border-radius: 6px;
+  font-family: inherit; font-size: 0.85rem; background: #fff;
+}
+.sync-badge {
+  font-size: 0.78rem;
+  border-radius: 12px;
+  padding: 4px 10px;
+  flex: 1;
+  min-width: 180px;
+}
+.sync-badge.synced { background: #eafaf1; color: #1e8449; border: 1px solid #a9dfbf; }
+.sync-badge.read-only { background: #fef9e7; color: #9a7d0a; border: 1px solid #f9e79f; }
+.sync-badge.local { background: #fdf2e9; color: #af601a; border: 1px solid #f5cba7; }
+.sync-badge.saving { background: #ebf5fb; color: #21618c; border: 1px solid #aed6f1; }
+.sync-badge.error { background: #fdedec; color: #922b21; border: 1px solid #e6b0aa; }
+.token-note { font-size: 0.8rem; color: #636e72; margin-bottom: 12px; line-height: 1.7; }
+.token-note code { background: #f1f2f6; padding: 1px 5px; border-radius: 4px; font-size: 0.78rem; }

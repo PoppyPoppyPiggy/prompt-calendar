@@ -2,7 +2,8 @@
 // Step 5에서 GitHub Contents API(옵션 A) 저장소로 교체될 인터페이스
 
 const EventStore = {
-  KEY: "prompt-calendar:events:user01", // Step 5에서 사용자별 키로 확장
+  userId: "user01", // Step 5: 현재 선택된 사용자 (FR-USER-01, 02)
+  get KEY() { return "prompt-calendar:events:" + this.userId; },
 
   // 전체 일정 로드
   load() {

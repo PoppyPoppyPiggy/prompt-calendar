@@ -13,6 +13,15 @@
   </header>
 
   <main class="container">
+    <!-- Step 5: 사용자 바 (FR-USER-01) + 동기화 상태 -->
+    <section class="user-bar">
+      <label class="user-label">사용자
+        <select id="user-select"></select>
+      </label>
+      <span id="sync-badge" class="sync-badge saving">불러오는 중...</span>
+      <button id="btn-token" class="nav-btn" title="GitHub 토큰 설정">🔑 토큰 설정</button>
+    </section>
+
     <!-- 캘린더 툴바 (FR-VIEW-05, 06) -->
     <section class="calendar-toolbar">
       <div class="nav-group">
@@ -112,11 +121,36 @@
     </div>
   </div>
 
+  <!-- Step 5: GitHub 토큰 설정 모달 (FR-USER-03, NFR-05) -->
+  <div id="token-modal" class="modal-overlay">
+    <div class="modal">
+      <h3>GitHub 토큰 설정</h3>
+      <p class="token-note">
+        레포에 일정을 <strong>저장(쓰기)</strong>하려면 Fine-grained Personal Access Token이 필요합니다.<br>
+        · 대상 레포: <code>prompt-calendar</code>만 선택<br>
+        · 권한: <code>Contents — Read and write</code>만 부여<br>
+        · 토큰은 <strong>이 브라우저(localStorage)에만</strong> 저장되며 코드·레포에 올라가지 않습니다.<br>
+        · 공용 PC에서는 사용 후 반드시 '토큰 삭제'를 눌러주세요.
+      </p>
+      <label class="field">
+        <span>Personal Access Token</span>
+        <input type="password" id="tk-input" placeholder="github_pat_...">
+      </label>
+      <div class="modal-actions">
+        <button id="tk-clear" class="btn-danger">토큰 삭제</button>
+        <span class="spacer"></span>
+        <button id="tk-close" class="btn-ghost">닫기</button>
+        <button id="tk-save" class="btn-primary">저장</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="app-footer">
-    <p>Step 4 · 캘린더 카테고리·색상 (FR-CAL-01~03) + 일정 CRUD·드래그 이동 (FR-EVENT-01~05, 07) · localStorage 저장 · GitHub Pages 정적 호스팅</p>
+    <p>Step 5 · GitHub 레포 데이터 연동 (FR-USER-01~04) · 옵션 A: Contents API + 사용자 입력 토큰 · localStorage 저장 · GitHub Pages 정적 호스팅</p>
   </footer>
 
   <script src="js/storage.js"></script>
+  <script src="js/github.js"></script>
   <script src="js/calendar.js"></script>
   <script src="js/app.js"></script>
 </body>
