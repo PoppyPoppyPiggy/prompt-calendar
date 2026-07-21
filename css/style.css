@@ -221,3 +221,55 @@ body {
 .detail-list dd { font-size: 0.9rem; margin-top: 2px; white-space: pre-wrap; }
 
 .event-chip.all-day { background: #1f3864; }
+
+/* ===== Step 3 추가: 드래그 앤 드롭 (FR-EVENT-07) ===== */
+.event-chip { cursor: grab; }
+.event-chip:active { cursor: grabbing; }
+.day-cell.drag-over {
+  background: #dbeafe;
+  outline: 2px dashed #1f3864;
+  outline-offset: -2px;
+}
+
+/* ===== Step 4: 캘린더 패널 (FR-CAL-01~03) ===== */
+.calendar-panel {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #dfe6e9;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+}
+.panel-label { font-size: 0.85rem; font-weight: 700; color: #636e72; }
+.calendar-list { display: flex; flex-wrap: wrap; gap: 10px; flex: 1; }
+.calendar-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.85rem;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+.cal-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.cal-del {
+  border: none; background: none; color: #b2bec3;
+  font-size: 0.95rem; cursor: pointer; padding: 0 0 0 2px;
+}
+.cal-del:hover { color: #c0392b; }
+.calendar-add { display: flex; align-items: center; gap: 6px; }
+.calendar-add input[type="text"] {
+  padding: 6px 8px; border: 1px solid #dfe6e9; border-radius: 6px; font-size: 0.85rem; width: 130px;
+}
+.calendar-add input[type="color"] {
+  width: 32px; height: 32px; border: 1px solid #dfe6e9; border-radius: 6px; padding: 2px; cursor: pointer;
+}
+.field select {
+  width: 100%; padding: 8px; border: 1px solid #dfe6e9; border-radius: 6px;
+  font-family: inherit; font-size: 0.9rem; background: #fff;
+}
+#dt-calendar .cal-dot { margin-right: 5px; }

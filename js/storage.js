@@ -58,3 +58,58 @@ const EventStore = {
     return `evt-${ymd}-${Math.random().toString(36).slice(2, 6)}`;
   }
 };
+
+/* ===== Step 4: 캘린더(카테고리) 저장소 (FR-CAL-01~03) ===== */
+const CalendarStoreDB = {
+  KEY: "prompt-calendar:calendars",
+
+  load() {
+    try {
+      const raw = localStorage.getItem(this.KEY);
+      const list = raw ? JSON.parse(raw) : null;
+      if (list && list.length) return list;
+    } catch (e) { console.warn("[CalendarStoreDB] 로드 실패", e); }
+    // 최초 실행: 기본 캘린더 생성
+    const defaults = [{ id: "default", name: "기본", color: "#4285f4", visible: true }];
+    this.save(defaults);
+    return defaults;
+  },
+
+  save(list) {
+    try {
+      localStorage.setItem(this.KEY, JSON.stringify(list));
+      return true;
+    } catch (e) {
+      alert("캘린더 저장에 실패했습니다.");
+      return false;
+    }
+  },
+
+  // FR-CAL-01: 캘린더 생성 (FR-CAL-02: 색상 지정)
+  add(name, color) {
+    const list = this.load();
+    const cal = { id: "cal-" + Math.random().toString(36).slice(2, 8), name, color, visible: true };
+    list.push(cal);
+    return this.save(list) ? cal : null;
+  },
+
+  // 캘린더 삭제 — 기본 캘린더는 삭제 불가, 소속 일정은 기본으로 이동
+  remove(id) {
+    if (id === "default") return false;
+    const list = this.load().filter(c => c.id !== id);
+    if (!this.save(list)) return false;
+    const events = EventStore.load().map(ev => (ev.calendar === id ? { ...ev, calendar: "default" } : ev));
+    EventStore.save(events);
+    return true;
+  },
+
+  // FR-CAL-03: 표시/숨김 토글
+  setVisible(id, visible) {
+    const list = this.load().map(c => (c.id === id ? { ...c, visible } : c));
+    return this.save(list);
+  },
+
+  get(id) {
+    return this.load().find(c => c.id === id) || null;
+  }
+};

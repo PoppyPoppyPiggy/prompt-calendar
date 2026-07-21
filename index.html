@@ -26,6 +26,17 @@
       </div>
     </section>
 
+    <!-- Step 4: 내 캘린더 패널 (FR-CAL-01~03) -->
+    <section class="calendar-panel">
+      <span class="panel-label">내 캘린더</span>
+      <div id="calendar-list" class="calendar-list"><!-- app.js가 렌더링 --></div>
+      <div class="calendar-add">
+        <input type="text" id="cal-name" placeholder="새 캘린더 이름" maxlength="20">
+        <input type="color" id="cal-color" value="#e91e63" title="색상 선택">
+        <button id="cal-add" class="nav-btn">추가</button>
+      </div>
+    </section>
+
     <!-- 월 뷰 격자 (FR-VIEW-01) -->
     <section class="calendar-wrap">
       <div class="weekday-row">
@@ -64,6 +75,10 @@
         </label>
       </div>
       <label class="field">
+        <span>캘린더</span>
+        <select id="ev-calendar"></select>
+      </label>
+      <label class="field">
         <span>장소</span>
         <input type="text" id="ev-location" placeholder="장소 (선택)" maxlength="60">
       </label>
@@ -84,6 +99,7 @@
       <h3 id="dt-title">-</h3>
       <dl class="detail-list">
         <dt>일시</dt><dd id="dt-time">-</dd>
+        <dt>캘린더</dt><dd id="dt-calendar">-</dd>
         <dt>장소</dt><dd id="dt-location">-</dd>
         <dt>설명</dt><dd id="dt-desc">-</dd>
       </dl>
@@ -97,7 +113,7 @@
   </div>
 
   <footer class="app-footer">
-    <p>Step 3 · 일정 CRUD (FR-EVENT-01~05) · localStorage 저장 · GitHub Pages 정적 호스팅</p>
+    <p>Step 4 · 캘린더 카테고리·색상 (FR-CAL-01~03) + 일정 CRUD·드래그 이동 (FR-EVENT-01~05, 07) · localStorage 저장 · GitHub Pages 정적 호스팅</p>
   </footer>
 
   <script src="js/storage.js"></script>

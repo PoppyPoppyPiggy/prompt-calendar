@@ -3,11 +3,15 @@ let editingId = null; // null = 생성 모드, 값 있으면 수정 모드
 
 document.addEventListener("DOMContentLoaded", () => {
   initCalendar();
+  renderCalendarPanel(); // Step 4: 캘린더 패널
 
   // 네비게이션 (Step 2)
   document.getElementById("btn-prev").addEventListener("click", () => moveMonth(-1));
   document.getElementById("btn-next").addEventListener("click", () => moveMonth(1));
   document.getElementById("btn-today").addEventListener("click", goToday);
+
+  // Step 4: 캘린더 추가 (FR-CAL-01, 02)
+  document.getElementById("cal-add").addEventListener("click", addCalendarFromPanel);
 
   // 툴바 새 일정 버튼
   document.getElementById("btn-new-event").addEventListener("click", () => openCreateModal(toDateKey(new Date())));
@@ -40,6 +44,7 @@ function openCreateModal(dateKey) {
   document.getElementById("ev-end-time").value = "10:00";
   document.getElementById("ev-location").value = "";
   document.getElementById("ev-desc").value = "";
+  fillCalendarSelect("default");
   toggleTimeInputs();
   openModal("event-modal");
   document.getElementById("ev-title").focus();
@@ -59,6 +64,7 @@ function openEditModal(id) {
   document.getElementById("ev-end-time").value = ev.allDay ? "10:00" : ev.end.slice(11, 16);
   document.getElementById("ev-location").value = ev.location || "";
   document.getElementById("ev-desc").value = ev.description || "";
+  fillCalendarSelect(ev.calendar || "default");
   toggleTimeInputs();
   openModal("event-modal");
 }
@@ -85,7 +91,7 @@ function saveEventFromForm() {
     start,
     end,
     allDay,
-    calendar: "default",  // Step 4: 캘린더 카테고리로 확장
+    calendar: document.getElementById("ev-calendar").value || "default",
     location: document.getElementById("ev-location").value.trim(),
     description: document.getElementById("ev-desc").value.trim(),
     repeat: null          // Step 6: 반복 일정(FR-EVENT-06)
@@ -108,6 +114,9 @@ function openDetailModal(id) {
   document.getElementById("dt-time").textContent = ev.allDay
     ? `${ev.start.slice(0, 10)} (종일)`
     : `${ev.start.slice(0, 10)} ${ev.start.slice(11, 16)} ~ ${ev.end.slice(0, 10)} ${ev.end.slice(11, 16)}`;
+  const dtCal = CalendarStoreDB.get(ev.calendar);
+  document.getElementById("dt-calendar").innerHTML = dtCal
+    ? `<span class="cal-dot" style="background:${dtCal.color}"></span>${dtCal.name}` : "-";
   document.getElementById("dt-location").textContent = ev.location || "-";
   document.getElementById("dt-desc").textContent = ev.description || "-";
   openModal("detail-modal");
@@ -141,4 +150,79 @@ function toggleTimeInputs() {
   const allDay = document.getElementById("ev-allday").checked;
   document.getElementById("ev-start-time").disabled = allDay;
   document.getElementById("ev-end-time").disabled = allDay;
+}
+
+
+/* ===== Step 4: 캘린더 패널 (FR-CAL-01~03) ===== */
+function renderCalendarPanel() {
+  const list = CalendarStoreDB.load();
+  const box = document.getElementById("calendar-list");
+  box.innerHTML = "";
+  list.forEach(cal => {
+    const item = document.createElement("label");
+    item.className = "calendar-item";
+
+    // FR-CAL-03: 표시/숨김 토글
+    const chk = document.createElement("input");
+    chk.type = "checkbox";
+    chk.checked = cal.visible;
+    chk.addEventListener("change", () => {
+      CalendarStoreDB.setVisible(cal.id, chk.checked);
+      renderCalendar();
+    });
+
+    const dot = document.createElement("span");
+    dot.className = "cal-dot";
+    dot.style.background = cal.color;
+
+    const name = document.createElement("span");
+    name.textContent = cal.name;
+
+    item.appendChild(chk);
+    item.appendChild(dot);
+    item.appendChild(name);
+
+    // 기본 캘린더 외에는 삭제 버튼
+    if (cal.id !== "default") {
+      const del = document.createElement("button");
+      del.className = "cal-del";
+      del.textContent = "×";
+      del.title = "캘린더 삭제";
+      del.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (!confirm(`'${cal.name}' 캘린더를 삭제할까요?\n소속 일정은 '기본' 캘린더로 이동합니다.`)) return;
+        CalendarStoreDB.remove(cal.id);
+        renderCalendarPanel();
+        reloadEvents();
+        renderCalendar();
+      });
+      item.appendChild(del);
+    }
+    box.appendChild(item);
+  });
+}
+
+function addCalendarFromPanel() {
+  const nameInput = document.getElementById("cal-name");
+  const name = nameInput.value.trim();
+  const color = document.getElementById("cal-color").value;
+  if (!name) { alert("캘린더 이름을 입력해주세요."); return; }
+  if (CalendarStoreDB.load().some(c => c.name === name)) { alert("같은 이름의 캘린더가 이미 있습니다."); return; }
+  if (CalendarStoreDB.add(name, color)) {
+    nameInput.value = "";
+    renderCalendarPanel();
+  }
+}
+
+// 일정 폼의 캘린더 select 채우기
+function fillCalendarSelect(selectedId) {
+  const sel = document.getElementById("ev-calendar");
+  sel.innerHTML = "";
+  CalendarStoreDB.load().forEach(cal => {
+    const opt = document.createElement("option");
+    opt.value = cal.id;
+    opt.textContent = cal.name;
+    if (cal.id === selectedId) opt.selected = true;
+    sel.appendChild(opt);
+  });
 }
