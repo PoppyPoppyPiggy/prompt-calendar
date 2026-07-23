@@ -31,7 +31,7 @@
       "calendar": "cal-rvekse",
       "location": "경기대학교",
       "description": "",
-      "repeat": null
+      "repeat": "daily"
     }
   ]
 }
