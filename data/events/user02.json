@@ -21,6 +21,17 @@
       "location": "",
       "description": "",
       "repeat": null
+    },
+    {
+      "id": "evt-20260723-vez4",
+      "title": "등교시간",
+      "start": "2026-07-23T09:00:00",
+      "end": "2026-07-23T10:00:00",
+      "allDay": false,
+      "calendar": "cal-rvekse",
+      "location": "경기대학교",
+      "description": "",
+      "repeat": null
     }
   ]
 }
