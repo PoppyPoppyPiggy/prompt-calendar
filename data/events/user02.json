@@ -31,7 +31,7 @@
       "calendar": "default",
       "location": "",
       "description": "",
-      "repeat": "weekly"
+      "repeat": null
     }
   ]
 }
